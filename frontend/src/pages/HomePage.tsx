@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import API from '../services/api';
+import LogoutButton from '../components/LogoutButton';
 
 interface Post {
   id: number;
@@ -18,6 +19,7 @@ export default function HomePage() {
 
   return (
     <div>
+      <LogoutButton />
       <h1>All Blog Posts</h1>
       {posts.map(post => (
         <div key={post.id}>
