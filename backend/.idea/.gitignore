@@ -6,3 +6,10 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+# Ignore SQLite database
+db.sqlite3
