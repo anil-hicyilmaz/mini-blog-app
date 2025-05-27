@@ -1,6 +1,9 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, serializers, generics
+from rest_framework.permissions import AllowAny
+
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from django.contrib.auth.models import User
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all().order_by('-created_at')
@@ -17,3 +20,24 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+    def create(self, validated_data):
+        return User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email'),
+            password=validated_data['password']
+        )
+
+class RegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+
+
